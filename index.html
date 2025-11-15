@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GaG Calculator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-leaf"></i> GaG Calculator</h1>
+      <p class="subtitle">Calculate your pet's weight at any age</p>
+    </div>
+
+    <div class="calculator">
+      <!-- Left Side -->
+      <div class="left">
+        <div class="form-section">
+          <h2><i class="fas fa-paw"></i> Pet Information</h2>
+          
+          <div class="input-group">
+            <label for="weight1">
+              <span class="label-text">Current Weight</span>
+              <span class="unit">(kg)</span>
+            </label>
+            <div class="input-wrapper">
+              <input type="number" id="weight1" placeholder="e.g., 2.50" step="0.01" min="0.01">
+              <span class="unit-indicator">kg</span>
+            </div>
+            <span class="input-hint">Enter your pet's current weight</span>
+          </div>
+
+          <div class="input-group">
+            <label for="age">
+              <span class="label-text">Pet Age</span>
+              <span class="unit">(1–100)</span>
+            </label>
+            <div class="input-wrapper">
+              <input type="number" id="age" placeholder="e.g., 5" min="1" max="100">
+              <span class="unit-indicator">yr</span>
+            </div>
+            <span class="input-hint">Years old</span>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button id="calculateBtn" class="btn-primary">
+            <i class="fas fa-calculator"></i> Calculate
+          </button>
+          <button id="clearBtn" class="btn-secondary">
+            <i class="fas fa-redo"></i> Clear
+          </button>
+        </div>
+
+        <div class="result" id="result" style="display: none;">
+          <div class="result-content">
+            <div class="result-item">
+              <span class="result-label"><i class="fas fa-tag"></i> Weight Class</span>
+              <span class="result-value" id="weightClass">—</span>
+            </div>
+            <div class="result-item">
+              <span class="result-label"><i class="fas fa-hourglass-end"></i> At Age</span>
+              <span class="result-value" id="resultAge">—</span>
+            </div>
+            <div class="result-item highlight">
+              <span class="result-label"><i class="fas fa-weight"></i> Weight</span>
+              <span class="result-value" id="resultWeight">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weight Class Legend -->
+        <div class="weight-class-legend">
+          <h3><i class="fas fa-list"></i> Weight Classes</h3>
+          <div class="legend-item" data-class="normal">
+            <span class="legend-dot"></span>
+            <span class="legend-label">0-39 kg</span>
+            <span class="legend-name">Normal</span>
+          </div>
+          <div class="legend-item" data-class="semi-huge">
+            <span class="legend-dot"></span>
+            <span class="legend-label">40-49 kg</span>
+            <span class="legend-name">Semi Huge</span>
+          </div>
+          <div class="legend-item" data-class="huge">
+            <span class="legend-dot"></span>
+            <span class="legend-label">50-69 kg</span>
+            <span class="legend-name">Huge</span>
+          </div>
+          <div class="legend-item" data-class="semi-titanic">
+            <span class="legend-dot"></span>
+            <span class="legend-label">70-79 kg</span>
+            <span class="legend-name">Semi Titanic</span>
+          </div>
+          <div class="legend-item" data-class="titanic">
+            <span class="legend-dot"></span>
+            <span class="legend-label">80-99 kg</span>
+            <span class="legend-name">Titanic</span>
+          </div>
+          <div class="legend-item" data-class="colossal">
+            <span class="legend-dot"></span>
+            <span class="legend-label">100+ kg</span>
+            <span class="legend-name">Colossal</span>
+          </div>
+        </div>
+
+        <div class="error-message" id="errorMessage" style="display: none;"></div>
+      </div>
+
+      <!-- Right Side -->
+      <div class="right">
+        <div class="table-header">
+          <h2><i class="fas fa-chart-line"></i> Weight Progression</h2>
+          <div class="table-actions">
+            <button id="exportBtn" class="btn-small" title="Export as CSV">
+              <i class="fas fa-download"></i> Export
+            </button>
+          </div>
+        </div>
+        <div class="table-info">Ages 1–125 years</div>
+        
+        <div class="table-shortcuts">
+          <button class="shortcut-btn" data-age="10">Age 10</button>
+          <button class="shortcut-btn" data-age="25">Age 25</button>
+          <button class="shortcut-btn" data-age="50">Age 50</button>
+          <button class="shortcut-btn" data-age="100">Age 100</button>
+          <button class="shortcut-btn" data-age="125">Age 125</button>
+        </div>
+
+        <div class="table-container">
+          <table id="weightTable">
+            <thead>
+              <tr>
+                <th>Age (yr)</th>
+                <th>Weight (kg)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Rows generated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
