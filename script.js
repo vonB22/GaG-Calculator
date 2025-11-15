@@ -8,10 +8,23 @@ const exportBtn = document.getElementById("exportBtn");
 const tableBody = document.querySelector("#weightTable tbody");
 
 let currentBaseWeight = null;
+let currentInputAge = null;
 
-// Function to calculate Grow a Garden weight
-function calculateWeight(baseWeight, age) {
-  return baseWeight * ((age / 10) + 1);
+// Function to calculate Grow a Garden weight with scaling factor
+// Uses reference table and scales based on input weight at input age
+function calculateWeight(inputWeight, inputAge, targetAge) {
+  // Original table reference: weight at input age
+  const tableWeightAtInputAge = 6.11 + (inputAge - 1) * 0.555; // linear original increment
+  
+  // Scaling factor to match input weight
+  const factor = inputWeight / tableWeightAtInputAge;
+  
+  // Calculate age 0 weight and increment based on scaling factor
+  const age0Weight = (6.11 - 0.555) * factor;
+  const increment = 0.555 * factor;
+  
+  // Return weight at the target age
+  return age0Weight + targetAge * increment;
 }
 
 // Function to get weight class
@@ -61,20 +74,20 @@ function hideError() {
 }
 
 // Function to generate table from age 1–125
-function generateTable(baseWeight) {
+function generateTable(inputWeight, inputAge) {
   tableBody.innerHTML = "";
   for (let i = 1; i <= 125; i++) {
-    const weight = calculateWeight(baseWeight, i);
-    const row = `<tr data-age="${i}"><td>${i}</td><td>${weight.toFixed(2)}</td></tr>`;
+    const w = calculateWeight(inputWeight, inputAge, i).toFixed(2);
+    const row = `<tr data-age="${i}"><td>${i}</td><td>${w}</td></tr>`;
     tableBody.innerHTML += row;
   }
 }
 
 // Function to display result
-function displayResult(age, weight) {
-  const weightClass = getWeightClass(weight);
-  document.getElementById("resultAge").textContent = age;
-  document.getElementById("resultWeight").textContent = `${weight.toFixed(2)} kg`;
+function displayResult(weightAtAge1) {
+  const weightClass = getWeightClass(weightAtAge1);
+  document.getElementById("resultAge").textContent = 1;
+  document.getElementById("resultWeight").textContent = `${weightAtAge1.toFixed(2)} kg`;
   document.getElementById("weightClass").textContent = weightClass;
   resultDiv.style.display = "block";
   hideError();
@@ -92,11 +105,11 @@ function scrollToAge(age) {
 
 // Export table as CSV
 function exportTableAsCSV() {
-  if (!currentBaseWeight) return;
+  if (!currentBaseWeight || !currentInputAge) return;
   
   let csv = "Age (years),Weight (kg),Weight Class\n";
   for (let i = 1; i <= 125; i++) {
-    const weight = calculateWeight(currentBaseWeight, i);
+    const weight = calculateWeight(currentBaseWeight, currentInputAge, i);
     const weightClass = getWeightClass(weight);
     csv += `${i},${weight.toFixed(2)},${weightClass}\n`;
   }
@@ -171,10 +184,10 @@ function performCalculation() {
     return;
   }
 
-  const baseWeight = weight1 / 1.1;
-  currentBaseWeight = baseWeight;
-  const weightAtAge = calculateWeight(baseWeight, age);
+  currentBaseWeight = weight1;
+  currentInputAge = age;
+  const weightAtAge1 = calculateWeight(weight1, age, 1);
 
-  displayResult(age, weightAtAge);
-  generateTable(baseWeight);
+  displayResult(weightAtAge1);
+  generateTable(weight1, age);
 }
